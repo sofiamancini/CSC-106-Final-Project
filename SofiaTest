@@ -1,73 +1,185 @@
-var Bitmoji = function (bitmojiX, bitmojiY, bitmojiHeight) {
-    this.bitmojiX = bitmojiX;
-    this.bitmojiY = bitmojiY;
-    this.bitmojiHeight = bitmojiHeight;
-    this.sticks = 0; 
+var currentScene = 0;
+
+var BitmojiObject = function(x, y, h) {
+    this.x = x;
+    this.y = y;
+    this.h = h;
 };
 
-Bitmoji.prototype.draw = function() {
-    var p = this.bitmojiHeight/150;
+var drawSofiaBitmoji = function(posX, posY, imgHeight) {
+    var p = imgHeight/150;
     fill(255, 205, 148);
-    ellipse(this.bitmojiX-p*-84, this.bitmojiY-p*-84, p*85, p*88); //face
+    ellipse(posX-p*-84, posY-p*-84, p*85, p*88); //face
     
     fill(66, 107, 3);
-    ellipse(this.bitmojiX+p*68, this.bitmojiY+p*71, p*11, p*10); //right eye
+    ellipse(posX+p*68, posY+p*71, p*11, p*10); //right eye
     fill(66, 107, 3);
-    ellipse(this.bitmojiX+p*98, this.bitmojiY+p*71, p*11, p*10); //left eye
+    ellipse(posX+p*98, posY+p*71, p*11, p*10); //left eye
     
     fill(250, 245, 245);
-    arc(this.bitmojiX+p*85,this.bitmojiY+p*105,p*31,p*8,-27,212); // mouth
+    arc(posX+p*85,posY+p*105,p*31,p*8,-27,212); // mouth
         
     fill (66, 44, 1); //hair
-    ellipse(this.bitmojiX+p*76, this.bitmojiY+p*33, p*19, p*8); 
-    ellipse(this.bitmojiX+p*68, this.bitmojiY+p*37, p*19, p*8);
-    ellipse(this.bitmojiX+p*61, this.bitmojiY+p*43, p*19, p*8);
-    ellipse(this.bitmojiX+p*56, this.bitmojiY+p*49, p*19, p*8);
-    ellipse(this.bitmojiX+p*52, this.bitmojiY+p*55, p*17, p*8);
-    ellipse(this.bitmojiX+p*48, this.bitmojiY+p*61, p*14, p*8);
-    ellipse(this.bitmojiX+p*45, this.bitmojiY+p*75, p*12, p*-28);
-    ellipse(this.bitmojiX+p*45, this.bitmojiY+p*95, p*15, p*-28);
-    ellipse(this.bitmojiX+p*45, this.bitmojiY+p*116, p*15, p*-29);
-    ellipse(this.bitmojiX+p*45, this.bitmojiY+p*130, p*22, p*-27);
-    ellipse(this.bitmojiX+p*46, this.bitmojiY+p*148, p*12,p*-74);
-    ellipse(this.bitmojiX+p*50, this.bitmojiY+p*147,p* 0, p*-50);
-    ellipse(this.bitmojiX+p*50, this.bitmojiY+p*147, p*16, p*-47);
-    ellipse(this.bitmojiX+p*43, this.bitmojiY+p*157, p*18, p*-50);
+    ellipse(posX+p*76, posY+p*33, p*19, p*8); 
+    ellipse(posX+p*68, posY+p*37, p*19, p*8);
+    ellipse(posX+p*61, posY+p*43, p*19, p*8);
+    ellipse(posX+p*56, posY+p*49, p*19, p*8);
+    ellipse(posX+p*52, posY+p*55, p*17, p*8);
+    ellipse(posX+p*48, posY+p*61, p*14, p*8);
+    ellipse(posX+p*45, posY+p*75, p*12, p*-28);
+    ellipse(posX+p*45, posY+p*95, p*15, p*-28);
+    ellipse(posX+p*45, posY+p*116, p*15, p*-29);
+    ellipse(posX+p*45, posY+p*130, p*22, p*-27);
+    ellipse(posX+p*46, posY+p*148, p*12,p*-74);
+    ellipse(posX+p*50, posY+p*147,p* 0, p*-50);
+    ellipse(posX+p*50, posY+p*147, p*16, p*-47);
+    ellipse(posX+p*43, posY+p*157, p*18, p*-50);
     
-    ellipse(this.bitmojiX+p*86, this.bitmojiY+p*33, p*19, p*8); //hair
-    ellipse(this.bitmojiX+p*99, this.bitmojiY+p*37, p*19, p*8);
-    ellipse(this.bitmojiX+p*108, this.bitmojiY+p*43, p*19,p* 8);
-    ellipse(this.bitmojiX+p*115, this.bitmojiY+p*49, p*19,p* 8);
-    ellipse(this.bitmojiX+p*120, this.bitmojiY+p*55, p*17, p*8);
-    ellipse(this.bitmojiX+p*122, this.bitmojiY+p*61, p*14, p*8);
-    ellipse(this.bitmojiX+p*124, this.bitmojiY+p*75, p*12,p* -28);
-    ellipse(this.bitmojiX+p*124, this.bitmojiY+p*95, p*15,p* -28);
-    ellipse(this.bitmojiX+p*123, this.bitmojiY+p*116, p*15, p*-29);
-    ellipse(this.bitmojiX+p*122, this.bitmojiY+p*130, p*22, p*-27);
-    ellipse(this.bitmojiX+p*128, this.bitmojiY+p*148,p* 12, p*-66);
-    ellipse(this.bitmojiX+p*122, this.bitmojiY+p*147, p*16, p*-57);
-    ellipse(this.bitmojiX+p*125, this.bitmojiY+p*157, p*18, p*-38);
+    ellipse(posX+p*86, posY+p*33, p*19, p*8); //hair
+    ellipse(posX+p*99, posY+p*37, p*19, p*8);
+    ellipse(posX+p*108, posY+p*43, p*19,p* 8);
+    ellipse(posX+p*115, posY+p*49, p*19,p* 8);
+    ellipse(posX+p*120, posY+p*55, p*17, p*8);
+    ellipse(posX+p*122, posY+p*61, p*14, p*8);
+    ellipse(posX+p*124, posY+p*75, p*12,p* -28);
+    ellipse(posX+p*124, posY+p*95, p*15,p* -28);
+    ellipse(posX+p*123, posY+p*116, p*15, p*-29);
+    ellipse(posX+p*122, posY+p*130, p*22, p*-27);
+    ellipse(posX+p*128, posY+p*148,p* 12, p*-66);
+    ellipse(posX+p*122, posY+p*147, p*16, p*-57);
+    ellipse(posX+p*125, posY+p*157, p*18, p*-38);
     
     fill(251, 255, 0); // hat
-    quad(this.bitmojiX+p*137, this.bitmojiY+p*54, this.bitmojiX+p*36, this.bitmojiY+p*55, this.bitmojiX+p*65,this.bitmojiY+p*8,this.bitmojiX+p*107,this.bitmojiY+p*8); 
+    quad(posX+p*137, posY+p*54, posX+p*36, posY+p*55, posX+p*65,posY+p*8, posX+p*107,posY+p*8); 
     fill(250, 245, 245);
-    rect(this.bitmojiX+p*75, this.bitmojiY+p*24, p*20, p*20); //detail
-    line(this.bitmojiX+p*80, this.bitmojiY+p*35, this.bitmojiX+p*80, this.bitmojiY+p*29); //detail
-    line(this.bitmojiX+p*86, this.bitmojiY+p*29, this.bitmojiX+p*86, this.bitmojiY+p*35); //detail
+    rect(posX+p*75, posY+p*24, p*20, p*20); //detail
+    line(posX+p*80, posY+p*35, posX+p*80, posY+p*29); //detail
+    line(posX+p*86, posY+p*29, posX+p*86, posY+p*35); //detail
     noFill();
-    arc(this.bitmojiX+p*84,this.bitmojiY+p*40,p*8,p*3,-32,217); //detail
-    var p = this.bitmojiHeight/150;
+    arc(posX+p*84,posY+p*40,p*8,p*3,-32,217); //detail
     fill(255, 232, 255);
-    quad(this.bitmojiX+p*103, this.bitmojiY+p*128, this.bitmojiX+p*68, this.bitmojiY+p*129, this.bitmojiX+p*32,this.bitmojiY+p*198,this.bitmojiX+p*136,this.bitmojiY+p*198); //shirt
+    quad(posX+p*103, posY+p*128, posX+p*68, posY+p*129, posX+p*32,posY+p*198,posX+p*136,posY+p*198); //shirt
     fill(78, 189, 83);
     textSize(p*20);
-    text("SM", this.bitmojiX+p*70, this.bitmojiY+p*172);
+    text("SM", posX+p*70, posY+p*172);  
+    fill(0, 0, 0);
+};
+
+var drawTaisBitmoji = function(posX, posY, imgHeight) {
+    var p = imgHeight/100;
+    noStroke();
+    fill(255, 224, 189);
+    ellipse(posX +(p*80), posY + (p*121), p*67,p*102); // head
+    fill(255, 255, 255);
+    arc(posX +(p*43),posY + (p*151),p*21,p*47,p*106,p*474); //left cheeck
+    arc(posX +(p*118),posY + (p*172), p*29, p*86, p*155,p*474); //right cheeck
+    fill(237, 226, 102);
+    quad(posX +(p*29),posY + (p*121),posX +(p*64),posY + (p*71), posX +(p*76), posY + (p*72),posX +(p*48), posY + (p*118)); //left hair
+    arc(posX +(p*94), posY + (p*70), p*55, p*46, 41,178); // top hair
+    arc(posX +(p*115), posY + (p*84), p*32, p*95, 68, 171); //right hair
+    fill(255, 110, 248);
+    ellipse(posX +(p*104),posY + (p*92),p*-22,p*5);//hairclip
+    ellipse(posX +(p*104),posY + (p*85),p*21,p*5); //hairclip
+    stroke(0,0,0); // stroke for glasses
+    fill(255,224,189); //skincolor for eyes
+    ellipse(posX +(p*66),posY + (p*115),p*21,p*13); //left glasses
+    ellipse(posX +(p*95),posY + (p*115),p*21,p*13); //right glasses
+    line(posX +(p*77),posY + (p*115),posX +(p*84),posY + (p*115)); // nose bridge
+    line(posX +(p*51), posY + (p*114),posX +(p*55), posY + (p*115)); //glasses left side
+    fill(96, 219, 102);
+    ellipse(posX +(p*66), posY + (p*115), p*5,p*7); // left eye
+    ellipse(posX +(p*95), posY + (p*115), p*5, p*7); //right eye
+    fill(255,224,189); //skincorol for nose
+    bezier(posX +(p*82),posY + (p*115),posX +(p*67),posY + (p*137),posX +(p*75),posY + (p*133),posX +(p*81),posY + (p*133));
+    fill(235, 127, 195); 
+    arc(posX +(p*78), posY + (p*151), p*26, p*16,  -13, 189); //lower lip
+    arc(posX +(p*72), posY + (p*151), p*13, p*8,  199, 349); //upper lip left
+    arc(posX +(p*85), posY + (p*151), p*13, p*8,  204, 356); //upper lip right
+    fill(255,255,255);
+    arc(posX +(p*78),posY + (p*152), p*26, p*3, 11, 177); //teeth
+    fill(24, 217, 214);
+    quad(posX +(p*68),posY + (p*171), posX +(p*90), posY + (p*179), posX +(p*135), posY + (p*265), posX +(p*14), posY + (p*262));// blouse
+    fill(24, 217, 214);
+    bezier(posX +(p*110),posY + (p*180),posX +(p*112), posY + (p*122),posX +(p*49),posY + (p*235),posX +(p*47), posY + (p*174)); //blouse color
+    bezier(posX +(p*47),posY + (p*175),posX +(p*95), posY + (p*137),posX +(p*48), posY + (p*231),posX +(p*111),posY + (p*179)); //blouse color
+    fill(19, 19, 20);
+    rect(posX +(p*51),posY + (p*204), p*24, p*4, p*1);
+    rect(posX +(p*62),posY + (p*207), p*4, p*32, p*1);
+    rect(posX +(p*84),posY + (p*207), p*4, p*32, p*1);
+    arc(posX +(p*87),posY + (p*208), p*25, p*21, -58, 237);
 
 };
 
-var bitmoji = new Bitmoji(180, 300, 35);   
-
-draw= function() {
-    bitmoji.draw();
+var drawBitmoji1 = function(bitmojiObject) {
+    drawTaisBitmoji (bitmojiObject.x, bitmojiObject.y, bitmojiObject.h );
+};
+var drawBitmoji2 = function(bitmojiObject) {
+    drawSofiaBitmoji (bitmojiObject.x, bitmojiObject.y, bitmojiObject.h );
 };
 
+var bitmojiTais = new BitmojiObject(162, -20, 41);
+var bitmojiSofia = new BitmojiObject(172,319,52);
+
+var Button = function(config) {
+    this.x = config.x || 0;
+    this.y = config.y || 0;
+    this.width = config.width || 150;
+    this.height = config.height || 50;
+    this.label = config.label || "Click";
+    this.onClick = config.onClick || function() {};
+};
+
+Button.prototype.draw = function() {
+    fill(0, 234, 255);
+    rect(this.x, this.y, this.width, this.height, 5);
+    fill(0, 0, 0);
+    textSize(19);
+    textAlign(LEFT, TOP);
+    text(this.label, this.x+25, this.y+this.height/4);
+};
+
+Button.prototype.isMouseInside = function() {
+    return mouseX > this.x &&
+           mouseX < (this.x + this.width) &&
+           mouseY > this.y &&
+           mouseY < (this.y + this.height);
+};
+
+Button.prototype.handleMouseClick = function() {
+    if (this.isMouseInside()) {
+        this.onClick();
+    }
+};
+
+var blueButton = new Button ({
+    x: 152,
+    y: 256,
+    width: 92,
+    label: "Start",
+    onClick: function() {
+        //gameScreen();
+    }
+    });
+
+var splashScreen = function()
+{
+    currentScene = 0;
+    background(210, 159, 237);
+    drawBitmoji1(bitmojiTais);
+    drawBitmoji2(bitmojiSofia);
+    textAlign(CENTER, CENTER);
+    textSize(25);
+    text('Bitmoji Pong', 203, 125);
+    textSize(22);
+    text('By T. Yakimovich & S. Mancini', 197, 161);
+    textSize(15);
+    text("Click on Bitmoji to score points", 198, 188);
+    text("After scoring 5 pionts in Level 1,", 201, 210);
+    text("It gets harder in Level 2!", 207, 234);
+    blueButton.draw();
+
+};
+
+draw = function() {
+    splashScreen();
+};

@@ -1,0 +1,138 @@
+var currentScene = 0;
+
+
+var BitmojiObject = function(x, y, h) {
+    this.x = x;
+    this.y = y;
+    this.h = h;
+    this.sticks = 0;
+};
+
+var drawBitmojiHead = function(posX, posY, imgHeight)
+{
+    var p = imgHeight/100;
+    noStroke();
+    fill(255, 224, 189);
+    ellipse(posX +(p*80), posY + (p*121), p*67,p*102); // head
+    fill(255, 255, 255);
+    arc(posX +(p*43),posY + (p*151),p*21,p*47,p*106,p*474); //left cheeck
+    arc(posX +(p*118),posY + (p*172), p*29, p*86, p*155,p*474); //right cheeck
+    fill(237, 226, 102);
+    quad(posX +(p*29),posY + (p*121),posX +(p*64),posY + (p*71), posX +(p*76), posY + (p*72),posX +(p*48), posY + (p*118)); //left hair
+    arc(posX +(p*94), posY + (p*70), p*55, p*46, 41,178); // top hair
+    arc(posX +(p*115), posY + (p*84), p*32, p*95, 68, 171); //right hair
+    fill(255, 110, 248);
+    ellipse(posX +(p*104),posY + (p*92),p*-22,p*5);//hairclip
+    ellipse(posX +(p*104),posY + (p*85),p*21,p*5); //hairclip
+    stroke(0,0,0); // stroke for glasses
+    fill(255,224,189); //skincolor for eyes
+    ellipse(posX +(p*66),posY + (p*115),p*21,p*13); //left glasses
+    ellipse(posX +(p*95),posY + (p*115),p*21,p*13); //right glasses
+    line(posX +(p*77),posY + (p*115),posX +(p*84),posY + (p*115)); // nose bridge
+    line(posX +(p*51), posY + (p*114),posX +(p*55), posY + (p*115)); //glasses left side
+    fill(96, 219, 102);
+    ellipse(posX +(p*66), posY + (p*115), p*5,p*7); // left eye
+    ellipse(posX +(p*95), posY + (p*115), p*5, p*7); //right eye
+    fill(255,224,189); //skincorol for nose
+    bezier(posX +(p*82),posY + (p*115),posX +(p*67),posY + (p*137),posX +(p*75),posY + (p*133),posX +(p*81),posY + (p*133));
+    fill(235, 127, 195); 
+    arc(posX +(p*78), posY + (p*151), p*26, p*16,  -13, 189); //lower lip
+    arc(posX +(p*72), posY + (p*151), p*13, p*8,  199, 349); //upper lip left
+    arc(posX +(p*85), posY + (p*151), p*13, p*8,  204, 356); //upper lip right
+    fill(255,255,255);
+    arc(posX +(p*78),posY + (p*152), p*26, p*3, 11, 177); //teeth
+};
+
+var drawBitmojiBody = function(posX, posY, imgHeight) 
+{
+    var p = imgHeight/100;
+    fill(24, 217, 214);
+    quad(posX +(p*68),posY + (p*171), posX +(p*90), posY + (p*179), posX +(p*135), posY + (p*265), posX +(p*14), posY + (p*262));// blouse
+    fill(24, 217, 214);
+    bezier(posX +(p*110),posY + (p*180),posX +(p*112), posY + (p*122),posX +(p*49),posY + (p*235),posX +(p*47), posY + (p*174)); //blouse color
+    bezier(posX +(p*47),posY + (p*175),posX +(p*95), posY + (p*137),posX +(p*48), posY + (p*231),posX +(p*111),posY + (p*179)); //blouse color
+        fill(19, 19, 20);
+        rect(posX +(p*51),posY + (p*204), p*24, p*4, p*1);
+        rect(posX +(p*62),posY + (p*207), p*4, p*32, p*1);
+        rect(posX +(p*84),posY + (p*207), p*4, p*32, p*1);
+        arc(posX +(p*87),posY + (p*208), p*25, p*21, -58, 237);
+    
+
+
+};
+
+
+var drawBitmoji = function(bitmojiObject) {
+    fill(255, 0, 0);
+    drawBitmojiHead (bitmojiObject.x, bitmojiObject.y, bitmojiObject.h );
+    drawBitmojiBody (bitmojiObject.x, bitmojiObject.y, bitmojiObject.h);
+};
+ 
+var BitmojiObject1= new BitmojiObject (226,290,20);
+var bitmoji = new BitmojiObject(226,290,30);
+var bitmoji1 = new BitmojiObject(146, -20, 50);
+
+
+
+var Button = function(config) {
+    this.x = config.x || 0;
+    this.y = config.y || 0;
+    this.width = config.width || 150;
+    this.height = config.height || 50;
+    this.label = config.label || "Click";
+    this.onClick = config.onClick || function() {};
+};
+
+Button.prototype.draw = function() {
+    fill(0, 234, 255);
+    rect(this.x, this.y, this.width, this.height, 5);
+    fill(0, 0, 0);
+    textSize(19);
+    textAlign(LEFT, TOP);
+    text(this.label, this.x+10, this.y+this.height/4);
+};
+
+Button.prototype.isMouseInside = function() {
+    return mouseX > this.x &&
+           mouseX < (this.x + this.width) &&
+           mouseY > this.y &&
+           mouseY < (this.y + this.height);
+};
+
+Button.prototype.handleMouseClick = function() {
+    if (this.isMouseInside()) {
+        this.onClick();
+    }
+};
+
+var blueButton = new Button ({
+    x: 150,
+    y: 300,
+    width: 100,
+    label: "Start",
+    onClick: function() {
+        //gameScreen();
+    }
+    });
+
+var splashScreen = function()
+{
+    currentScene = 0;
+    background(210, 159, 237);
+    drawBitmoji(bitmoji1);
+    textSize(25);
+    text("Smash Bitmoji", 115, 165);
+    textSize(13);
+    text("By T. Yakimovich", 145, 192);
+    textSize(15);
+    text("Click on Bitmoji to score points", 100, 210);
+    text("After scoring 5 pionts in Level 1,", 100, 230);
+    text("It gets harder in Level 2!", 100, 250);
+    blueButton.draw();
+
+};
+
+draw = function() {
+    
+    splashScreen();
+};

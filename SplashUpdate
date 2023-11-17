@@ -64,7 +64,6 @@ var drawSofiaBitmoji = function(posX, posY, imgHeight) {
     text("SM", posX+p*70, posY+p*172);  
     fill(0, 0, 0);
 };
-
 var drawTaisBitmoji = function(posX, posY, imgHeight) {
     var p = imgHeight/100;
     noStroke();
@@ -110,14 +109,14 @@ var drawTaisBitmoji = function(posX, posY, imgHeight) {
 
 };
 
-var drawBitmoji1 = function(bitmojiObject) {
+var drawBitmojiTais = function(bitmojiObject) {
     drawTaisBitmoji (bitmojiObject.x, bitmojiObject.y, bitmojiObject.h );
 };
-var drawBitmoji2 = function(bitmojiObject) {
+var drawBitmojiSofia = function(bitmojiObject) {
     drawSofiaBitmoji (bitmojiObject.x, bitmojiObject.y, bitmojiObject.h );
 };
 
-var bitmojiTais = new BitmojiObject(162, -20, 41);
+var bitmojiTais = new BitmojiObject(162, -20, 40);
 var bitmojiSofia = new BitmojiObject(172,319,52);
 
 var Button = function(config) {
@@ -151,35 +150,78 @@ Button.prototype.handleMouseClick = function() {
     }
 };
 
-var blueButton = new Button ({
+var startButton = new Button ({
     x: 152,
     y: 256,
     width: 92,
     label: "Start",
     onClick: function() {
-        //gameScreen();
+       currentScene = 2;
     }
     });
 
-var splashScreen = function()
-{
+var reStartButton = new Button ({
+    x: 152,
+    y: 256,
+    width: 104,
+    label: "Restart",
+    onClick: function() {
+        currentScene = 0;
+    }
+    });
+var splashScreen = function(){
     currentScene = 0;
     background(210, 159, 237);
-    drawBitmoji1(bitmojiTais);
-    drawBitmoji2(bitmojiSofia);
+    drawBitmojiTais(bitmojiTais);
+    drawBitmojiSofia(bitmojiSofia);
     textAlign(CENTER, CENTER);
     textSize(25);
     text('Bitmoji Pong', 203, 125);
     textSize(22);
     text('By T. Yakimovich & S. Mancini', 197, 161);
     textSize(15);
-    text("Click on Bitmoji to score points", 198, 188);
-    text("After scoring 5 pionts in Level 1,", 201, 210);
+    text('Get the ball past your opponent to score', 198, 188);
+    text("After scoring 10 pionts in Level 1,", 201, 210);
     text("It gets harder in Level 2!", 207, 234);
-    blueButton.draw();
+    startButton.draw();
 
 };
 
+var endScreen = function(){
+    currentScene = 2;
+    background(144, 225, 232);
+    drawBitmojiTais(bitmojiTais);
+    drawBitmojiSofia(bitmojiSofia);
+    textAlign(CENTER, CENTER);
+    textSize(25);
+    //text('Bitmoji Pong', 203, 125);
+    textSize(22);
+    text('Player wins ', 197, 161); // Name of the winner 
+    textSize(15);
+    text('Your final score is: ', 198, 188); //Final Score here
+   // text("After scoring 10 pionts in Level 1,", 201, 210); //Game time
+   // text("It gets harder in Level 2!", 207, 234);
+    reStartButton.draw();
+
+};
+
+mouseClicked = function() {
+    if (currentScene ===0) {
+        startButton.handleMouseClick();
+    }
+    else if (currentScene === 2) {
+        reStartButton.handleMouseClick();  
+        }
+};
+
+splashScreen();
+
 draw = function() {
-    splashScreen();
+    if (currentScene === 0) {
+        splashScreen();
+        startButton.draw();
+    } else if (currentScene === 2) {
+        endScreen();
+        reStartButton.draw();
+    }
 };

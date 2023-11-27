@@ -1,0 +1,293 @@
+var player1Y = height/2;
+var player2Y = height/2;
+var player1Score = 0;
+var player2Score = 0;
+var ball;
+var gameStarted = false;
+var t = 0;
+
+//Constants
+var PAUSE_TIME = 60;
+var PLAYER_MOVE_SPEED = 2;
+var BALL_SPEED = 2.5;
+var PADDLE_HEIGHT = 100;
+var PADDLE_WIDTH = 20;
+
+angleMode = "degrees";
+
+
+var BitmojiObject = function(x, y, h) {
+    this.x = x;
+    this.y = y;
+    this.h = h;
+};
+
+var drawSofiaBitmoji = function(posX, posY, imgHeight) {
+    var p = imgHeight/150;
+    fill(255, 205, 148);
+    ellipse(posX-p*-84, posY-p*-84, p*85, p*88); //face
+    
+    fill(66, 107, 3);
+    ellipse(posX+p*68, posY+p*71, p*11, p*10); //right eye
+    fill(66, 107, 3);
+    ellipse(posX+p*98, posY+p*71, p*11, p*10); //left eye
+    
+    fill(250, 245, 245);
+    arc(posX+p*85,posY+p*105,p*31,p*8,-27,212); // mouth
+        
+    fill (66, 44, 1); //hair
+    ellipse(posX+p*76, posY+p*33, p*19, p*8); 
+    ellipse(posX+p*68, posY+p*37, p*19, p*8);
+    ellipse(posX+p*61, posY+p*43, p*19, p*8);
+    ellipse(posX+p*56, posY+p*49, p*19, p*8);
+    ellipse(posX+p*52, posY+p*55, p*17, p*8);
+    ellipse(posX+p*48, posY+p*61, p*14, p*8);
+    ellipse(posX+p*45, posY+p*75, p*12, p*-28);
+    ellipse(posX+p*45, posY+p*95, p*15, p*-28);
+    ellipse(posX+p*45, posY+p*116, p*15, p*-29);
+    ellipse(posX+p*45, posY+p*130, p*22, p*-27);
+    ellipse(posX+p*46, posY+p*148, p*12,p*-74);
+    ellipse(posX+p*50, posY+p*147,p* 0, p*-50);
+    ellipse(posX+p*50, posY+p*147, p*16, p*-47);
+    ellipse(posX+p*43, posY+p*157, p*18, p*-50);
+    
+    ellipse(posX+p*86, posY+p*33, p*19, p*8); //hair
+    ellipse(posX+p*99, posY+p*37, p*19, p*8);
+    ellipse(posX+p*108, posY+p*43, p*19,p* 8);
+    ellipse(posX+p*115, posY+p*49, p*19,p* 8);
+    ellipse(posX+p*120, posY+p*55, p*17, p*8);
+    ellipse(posX+p*122, posY+p*61, p*14, p*8);
+    ellipse(posX+p*124, posY+p*75, p*12,p* -28);
+    ellipse(posX+p*124, posY+p*95, p*15,p* -28);
+    ellipse(posX+p*123, posY+p*116, p*15, p*-29);
+    ellipse(posX+p*122, posY+p*130, p*22, p*-27);
+    ellipse(posX+p*128, posY+p*148,p* 12, p*-66);
+    ellipse(posX+p*122, posY+p*147, p*16, p*-57);
+    ellipse(posX+p*125, posY+p*157, p*18, p*-38);
+    
+    fill(251, 255, 0); // hat
+    quad(posX+p*137, posY+p*54, posX+p*36, posY+p*55, posX+p*65,posY+p*8, posX+p*107,posY+p*8); 
+    fill(250, 245, 245);
+    rect(posX+p*75, posY+p*24, p*20, p*20); //detail
+    line(posX+p*80, posY+p*35, posX+p*80, posY+p*29); //detail
+    line(posX+p*86, posY+p*29, posX+p*86, posY+p*35); //detail
+    noFill();
+    arc(posX+p*84,posY+p*40,p*8,p*3,-32,217); //detail
+    fill(255, 232, 255);
+    quad(posX+p*103, posY+p*128, posX+p*68, posY+p*129, posX+p*32,posY+p*198,posX+p*136,posY+p*198); //shirt
+    fill(78, 189, 83);
+    textSize(p*20);
+    text("SM", posX+p*70, posY+p*172);  
+    fill(0, 0, 0);
+};
+var drawTaisBitmoji = function(posX, posY, imgHeight) {
+    var p = imgHeight/100;
+    noStroke();
+    fill(255, 224, 189);
+    ellipse(posX +(p*80), posY + (p*121), p*67,p*102); // head
+    fill(255, 255, 255);
+    arc(posX +(p*43),posY + (p*151),p*21,p*47,p*106,p*474); //left cheeck
+    arc(posX +(p*118),posY + (p*172), p*29, p*86, p*155,p*474); //right cheeck
+    fill(237, 226, 102);
+    quad(posX +(p*29),posY + (p*121),posX +(p*64),posY + (p*71), posX +(p*76), posY + (p*72),posX +(p*48), posY + (p*118)); //left hair
+    arc(posX +(p*94), posY + (p*70), p*55, p*46, 41,178); // top hair
+    arc(posX +(p*115), posY + (p*84), p*32, p*95, 68, 171); //right hair
+    fill(255, 110, 248);
+    ellipse(posX +(p*104),posY + (p*92),p*-22,p*5);//hairclip
+    ellipse(posX +(p*104),posY + (p*85),p*21,p*5); //hairclip
+    stroke(0,0,0); // stroke for glasses
+    fill(255,224,189); //skincolor for eyes
+    ellipse(posX +(p*66),posY + (p*115),p*21,p*13); //left glasses
+    ellipse(posX +(p*95),posY + (p*115),p*21,p*13); //right glasses
+    line(posX +(p*77),posY + (p*115),posX +(p*84),posY + (p*115)); // nose bridge
+    line(posX +(p*51), posY + (p*114),posX +(p*55), posY + (p*115)); //glasses left side
+    fill(96, 219, 102);
+    ellipse(posX +(p*66), posY + (p*115), p*5,p*7); // left eye
+    ellipse(posX +(p*95), posY + (p*115), p*5, p*7); //right eye
+    fill(255,224,189); //skincorol for nose
+    bezier(posX +(p*82),posY + (p*115),posX +(p*67),posY + (p*137),posX +(p*75),posY + (p*133),posX +(p*81),posY + (p*133));
+    fill(235, 127, 195); 
+    arc(posX +(p*78), posY + (p*151), p*26, p*16,  -13, 189); //lower lip
+    arc(posX +(p*72), posY + (p*151), p*13, p*8,  199, 349); //upper lip left
+    arc(posX +(p*85), posY + (p*151), p*13, p*8,  204, 356); //upper lip right
+    fill(255,255,255);
+    arc(posX +(p*78),posY + (p*152), p*26, p*3, 11, 177); //teeth
+    fill(24, 217, 214);
+    quad(posX +(p*68),posY + (p*171), posX +(p*90), posY + (p*179), posX +(p*135), posY + (p*265), posX +(p*14), posY + (p*262));// blouse
+    fill(24, 217, 214);
+    bezier(posX +(p*110),posY + (p*180),posX +(p*112), posY + (p*122),posX +(p*49),posY + (p*235),posX +(p*47), posY + (p*174)); //blouse color
+    bezier(posX +(p*47),posY + (p*175),posX +(p*95), posY + (p*137),posX +(p*48), posY + (p*231),posX +(p*111),posY + (p*179)); //blouse color
+    fill(19, 19, 20);
+    rect(posX +(p*51),posY + (p*204), p*24, p*4, p*1);
+    rect(posX +(p*62),posY + (p*207), p*4, p*32, p*1);
+    rect(posX +(p*84),posY + (p*207), p*4, p*32, p*1);
+    arc(posX +(p*87),posY + (p*208), p*25, p*21, -58, 237);
+
+};
+
+var Ball = function(position, speed) {
+    this.position = position;
+    this.speed = speed || BALL_SPEED;
+    
+    this.radius = 12;
+    
+    this.resetVelocity = function() {
+        this.theta = random(0, 360);
+        this.velocity = new PVector(
+        this.speed*cos(this.theta), -this.speed*sin(this.theta));
+         player2Y = height/2;
+    };
+    this.resetVelocity();
+    
+    this.draw = function() {
+        fill(255, 255, 255);
+        noStroke();
+        ellipse(this.position.x, this.position.y,
+        this.radius*2, this.radius*2);
+    };
+    
+    this.collideWithPaddle = function(x, y) {
+        if (this.position.x - this.radius < x + PADDLE_WIDTH/2 &&
+        this.position.x + this.radius > x - PADDLE_WIDTH/2) {
+            if (dist(0, this.position.y, 0, y) <
+            PADDLE_HEIGHT/2 + this.radius) {
+                if (this.position.x > x) {
+                    this.position.x = x + 
+                    this.radius + PADDLE_WIDTH/2;
+                }
+                else if (this.position.x < x) {
+                    this.position.x = x - 
+                    this.radius - PADDLE_WIDTH/2;
+                }
+                this.velocity.mult(new PVector(-1, 1));
+            }
+        }
+    };
+    
+    this.update = function() {
+        //Handle wall collisions
+        if (this.position.x < 0) {
+            player2Score++;
+            this.position = new PVector(width/2, height/2);
+            gameStarted = false;
+            this.resetVelocity();
+        }
+        else if (this.position.x > width) {
+            player1Score++;
+            this.position = new PVector(width/2, height/2);
+            gameStarted = false;
+            this.resetVelocity();
+        }
+        if (this.position.y < 0) {
+            this.position.y = 0;
+            this.velocity.mult(new PVector(1, -1));
+        }
+        else if (this.position.y > height) {
+            this.position.y = height;
+            this.velocity.mult(new PVector(1, -1));
+        }
+        
+        //Handle paddle collisions //Change numbers to bigger or smaller to find out where the ball hits the paddle
+        this.collideWithPaddle(-11, player1Y);
+        this.collideWithPaddle(width-8, player2Y);
+        
+        this.position.add(this.velocity);
+    };
+};
+
+ball = new Ball(new PVector(width/2, height/2));
+
+var drawScores = function() {
+    var s;
+    
+    fill(255, 255, 255);
+    textSize(20);
+    
+    s = "Player 1: " + player1Score;
+    text(s, width*0.25-textWidth(s)/2, 25);
+    s = "Player 2: " + player2Score;
+    text(s, width*0.75-textWidth(s)/2, 25);
+};
+
+var updatePlayer2 = function() {
+    if (abs(player2Y-ball.position.y) < PLAYER_MOVE_SPEED){
+        player2Y = ball.position.y;
+    }
+    else if (player2Y-ball.position.y >= PLAYER_MOVE_SPEED) {
+        player2Y -= PLAYER_MOVE_SPEED;
+    }
+    else if (player2Y-ball.position.y <= PLAYER_MOVE_SPEED) {
+        player2Y += PLAYER_MOVE_SPEED;
+    }
+    
+};
+
+//Move the player up
+var movePlayerUp = function() {
+    player1Y -= PLAYER_MOVE_SPEED;
+};
+
+//Move the player down
+var movePlayerDown = function() {
+    player1Y += PLAYER_MOVE_SPEED;
+};
+
+var drawPlayers = function() {
+    
+    
+    //Constrain the player movement
+    player1Y = constrain (player1Y, 0, 400);
+    
+    var drawBitmojiTais = function(bitmojiObject) {
+    drawTaisBitmoji (bitmojiObject.x, bitmojiObject.y, bitmojiObject.h );
+    };
+    var drawBitmojiSofia = function(bitmojiObject) {
+    drawSofiaBitmoji (bitmojiObject.x, bitmojiObject.y, bitmojiObject.h );
+    };
+    
+    var bitmojiTais = new BitmojiObject(-11, player1Y, PADDLE_HEIGHT/2.5);
+    var bitmojiSofia = new BitmojiObject(width-63, player2Y, PADDLE_HEIGHT/1.5);
+    
+    drawBitmojiTais(bitmojiTais);
+    drawBitmojiSofia(bitmojiSofia);
+   /* rectMode(CENTER);
+    fill(255, 255, 255);
+    rect(20, player1Y, PADDLE_WIDTH, PADDLE_HEIGHT);
+    rect(width-20, player2Y, PADDLE_WIDTH, PADDLE_HEIGHT);*/
+};
+
+draw = function() {
+    //Control Player 1
+ if (keyIsPressed)
+ {
+     if (keyCode === UP)
+     {
+         movePlayerUp();
+     }
+     else if (keyCode === DOWN)
+     {
+         movePlayerDown();
+     }
+ }
+    //Draw the environment
+    background(0, 0, 0);
+    updatePlayer2();
+    drawPlayers();
+    drawScores();
+    stroke(255, 255, 255);
+    line(width/2, 0, width/2, height);
+    
+    //Draw the ball
+    ball.draw();
+    
+    if (!gameStarted) {
+        t++;
+        if (t >= PAUSE_TIME) {
+            t = 0;
+            gameStarted = true;
+        }
+        return;
+    }
+    
+    ball.update();
+};

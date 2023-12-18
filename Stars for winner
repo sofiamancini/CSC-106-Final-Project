@@ -1,0 +1,847 @@
+var currentScene = 0;
+var isTaisSelected = false;
+var isSofiaSelected = false;
+var player1Y = height/2;
+var player2Y = height/2;
+var player1Score = 0;
+var player2Score = 0;
+var ball;
+var gameStarted = false;
+var t = 0;
+var winner;
+var winnerScore;
+var player1;
+var player2;
+var currentDifficulty = 'easy'; 
+
+//Constants
+var PAUSE_TIME = 60;
+var PLAYER_MOVE_SPEED = 2;
+var BALL_SPEED = 2.5;
+BALL_SPEED = 2.5;
+var PADDLE_HEIGHT = 100;
+var PADDLE_WIDTH = 65;
+
+angleMode = "degrees";
+
+var BitmojiObject = function(x, y, h) {
+    this.x = x;
+    this.y = y;
+    this.h = h;
+}; //This object will store the basic variables needed for the bitmojis
+
+var drawSofiaBitmoji = function(posX, posY, imgHeight) {
+    strokeWeight(1);
+    var p = imgHeight/150;
+    fill(255, 205, 148);
+    ellipse(posX-p*-84, posY-p*-84, p*85, p*88); //face
+    
+    fill(66, 107, 3);
+    ellipse(posX+p*68, posY+p*71, p*11, p*10); //right eye
+    fill(66, 107, 3);
+    ellipse(posX+p*98, posY+p*71, p*11, p*10); //left eye
+    
+    fill(250, 245, 245);
+    arc(posX+p*85,posY+p*105,p*31,p*8,-27,212); // mouth
+        
+    fill (66, 44, 1); //hair
+    ellipse(posX+p*76, posY+p*33, p*19, p*8); 
+    ellipse(posX+p*68, posY+p*37, p*19, p*8);
+    ellipse(posX+p*61, posY+p*43, p*19, p*8);
+    ellipse(posX+p*56, posY+p*49, p*19, p*8);
+    ellipse(posX+p*52, posY+p*55, p*17, p*8);
+    ellipse(posX+p*48, posY+p*61, p*14, p*8);
+    ellipse(posX+p*45, posY+p*75, p*12, p*-28);
+    ellipse(posX+p*45, posY+p*95, p*15, p*-28);
+    ellipse(posX+p*45, posY+p*116, p*15, p*-29);
+    ellipse(posX+p*45, posY+p*130, p*22, p*-27);
+    ellipse(posX+p*46, posY+p*148, p*12,p*-74);
+    ellipse(posX+p*50, posY+p*147,p* 0, p*-50);
+    ellipse(posX+p*50, posY+p*147, p*16, p*-47);
+    ellipse(posX+p*43, posY+p*157, p*18, p*-50);
+    
+    ellipse(posX+p*86, posY+p*33, p*19, p*8); //hair
+    ellipse(posX+p*99, posY+p*37, p*19, p*8);
+    ellipse(posX+p*108, posY+p*43, p*19,p* 8);
+    ellipse(posX+p*115, posY+p*49, p*19,p* 8);
+    ellipse(posX+p*120, posY+p*55, p*17, p*8);
+    ellipse(posX+p*122, posY+p*61, p*14, p*8);
+    ellipse(posX+p*124, posY+p*75, p*12,p* -28);
+    ellipse(posX+p*124, posY+p*95, p*15,p* -28);
+    ellipse(posX+p*123, posY+p*116, p*15, p*-29);
+    ellipse(posX+p*122, posY+p*130, p*22, p*-27);
+    ellipse(posX+p*128, posY+p*148,p* 12, p*-66);
+    ellipse(posX+p*122, posY+p*147, p*16, p*-57);
+    ellipse(posX+p*125, posY+p*157, p*18, p*-38);
+    
+    fill(251, 255, 0); // hat
+    quad(posX+p*137, posY+p*54, posX+p*36, posY+p*55, posX+p*65,posY+p*8, posX+p*107,posY+p*8); 
+    fill(250, 245, 245);
+    rect(posX+p*75, posY+p*24, p*20, p*20); //detail
+    line(posX+p*80, posY+p*35, posX+p*80, posY+p*29); //detail
+    line(posX+p*86, posY+p*29, posX+p*86, posY+p*35); //detail
+    noFill();
+    arc(posX+p*84,posY+p*40,p*8,p*3,-32,217); //detail
+    fill(255, 232, 255);
+    quad(posX+p*103, posY+p*128, posX+p*68, posY+p*129, posX+p*32,posY+p*198,posX+p*136,posY+p*198); //shirt
+    fill(78, 189, 83);
+    textSize(p*20);
+    text("SM", posX+p*70, posY+p*172);  
+    stroke(255, 140, 0); //Tennis racket
+    strokeWeight(3);
+    fill(113, 222, 115);
+    ellipse(posX + 2,posY + 13,p * 52,p * 89); 
+    fill(255, 140, 0);
+    rect(posX + 0,posY + 30,p*11,p*52);
+    stroke(128, 128, 128);
+    strokeWeight(1.5);
+    line(posX + -4,posY + 5,posX + -4,posY + 20);
+    line(posX + 0,posY + 0,posX + 0,posY + 25);
+    line(posX + 4,posY + 1,posX + 4,posY + 24);
+    line(posX + 8,posY + 5,posX + 8,posY + 20);
+    line(posX + -3,posY + 3,posX + 5,posY + 3);
+    line(posX + -3,posY + 7,posX + 6,posY + 7);
+    line(posX + -5,posY + 11,posX + 7,posY + 11);
+    line(posX + -5,posY + 15,posX + 7,posY + 15);
+    line(posX + -4,posY + 19,posX + 6,posY + 19);
+    line(posX + -3,posY + 23,posX + 5,posY + 23);
+}; //Code to draw a Sofia bitmoji
+var drawTaisBitmoji = function(posX, posY, imgHeight) {
+    var p = imgHeight/100;
+    strokeWeight(1);
+    noStroke();
+    fill(255, 224, 189);
+    ellipse(posX +(p*80), posY + (p*121), p*67,p*102); // head
+    fill(255, 255, 255);
+    arc(posX +(p*43),posY + (p*151),p*21,p*47,p*106,p*474); //left cheeck
+    arc(posX +(p*118),posY + (p*172), p*29, p*86, p*155,p*474); //right cheeck
+    fill(237, 226, 102);
+    quad(posX +(p*29),posY + (p*121),posX +(p*64),posY + (p*71), posX +(p*76), posY + (p*72),posX +(p*48), posY + (p*118)); //left hair
+    arc(posX +(p*95), posY + (p*70), p*55, p*46, 41,178); // top hair
+    arc(posX +(p*115), posY + (p*84), p*32, p*95, 68, 171); //right hair
+    fill(255, 110, 248);
+    ellipse(posX +(p*104),posY + (p*92),p*-22,p*5);//hairclip
+    ellipse(posX +(p*104),posY + (p*85),p*21,p*5); //hairclip
+    stroke(0,0,0); // stroke for glasses
+    fill(255,224,189); //skincolor for eyes
+    ellipse(posX +(p*66),posY + (p*115),p*21,p*13); //left glasses
+    ellipse(posX +(p*95),posY + (p*115),p*21,p*13); //right glasses
+    line(posX +(p*77),posY + (p*115),posX +(p*84),posY + (p*115)); // nose bridge
+    line(posX +(p*51), posY + (p*114),posX +(p*55), posY + (p*115)); //glasses left side
+    fill(96, 219, 102);
+    ellipse(posX +(p*66), posY + (p*115), p*5,p*7); // left eye
+    ellipse(posX +(p*95), posY + (p*115), p*5, p*7); //right eye
+    fill(255,224,189); //skincorol for nose
+    bezier(posX +(p*82),posY + (p*115),posX +(p*67),posY + (p*137),posX +(p*75),posY + (p*133),posX +(p*81),posY + (p*133));
+    fill(235, 127, 195); 
+    arc(posX +(p*78), posY + (p*151), p*26, p*16,  -13, 189); //lower lip
+    arc(posX +(p*72), posY + (p*151), p*13, p*8,  199, 349); //upper lip left
+    arc(posX +(p*85), posY + (p*151), p*13, p*8,  204, 356); //upper lip right
+    fill(255,255,255);
+    arc(posX +(p*78),posY + (p*152), p*26, p*3, 11, 177); //teeth
+    fill(24, 217, 214);
+    quad(posX +(p*68),posY + (p*171), posX +(p*90), posY + (p*179), posX +(p*135), posY + (p*265), posX +(p*14), posY + (p*262));// blouse
+    fill(24, 217, 214);
+    bezier(posX +(p*110),posY + (p*180),posX +(p*112), posY + (p*122),posX +(p*49),posY + (p*235),posX +(p*47), posY + (p*174)); //blouse color
+    bezier(posX +(p*47),posY + (p*175),posX +(p*95), posY + (p*137),posX +(p*48), posY + (p*231),posX +(p*111),posY + (p*179)); //blouse color
+    fill(19, 19, 20);
+    rect(posX +(p*51),posY + (p*204), p*24, p*4, p*1);
+    rect(posX +(p*62),posY + (p*207), p*4, p*32, p*1);
+    rect(posX +(p*84),posY + (p*207), p*4, p*32, p*1);
+    arc(posX +(p*87),posY + (p*208), p*25, p*21, -58, 237);
+    stroke(0, 98, 255);//Tennis racket
+    strokeWeight(3);
+    fill(113, 222, 115);
+    ellipse(posX + 62,posY + 43,p * 52,p * 89); 
+    fill(0, 98, 255);
+    rect(posX + 59,posY + 61,p*11,p*52);
+    stroke(128, 128, 128);
+    strokeWeight(1.5);
+    line(posX + 55,posY + 34,posX + 55,posY + 53);
+    line(posX + 59,posY + 29,posX + 59,posY + 57);
+    line(posX + 63,posY + 27,posX + 63,posY + 58);
+    line(posX + 67,posY + 30,posX + 67,posY + 55);
+    line(posX + 71,posY + 37,posX + 71,posY + 50);
+    line(posX + 56,posY + 31,posX + 67,posY + 31);
+    line(posX + 56,posY + 35,posX + 68,posY + 35);
+    line(posX + 53,posY + 39,posX + 68,posY + 39);
+    line(posX + 53,posY + 43,posX + 68,posY + 43);
+    line(posX + 53,posY + 47,posX + 68,posY + 47);
+    line(posX + 56,posY + 51,posX + 68,posY + 51);
+    line(posX + 57,posY + 55,posX + 66,posY + 55);
+}; //Code to draw a Tais bitmoji
+
+var drawBitmojiTais = function(bitmojiObject) {
+    drawTaisBitmoji(bitmojiObject.x, bitmojiObject.y, bitmojiObject.h);
+    if (isTaisSelected && currentScene === 1) {
+        stroke(255, 0, 0);
+        strokeWeight(3);
+        noFill();
+        rect(bitmojiObject.x + -3, bitmojiObject.y + 12, 80, 110, 10);
+        stroke(0, 0, 0);
+        strokeWeight(1);
+    }
+}; //Code that stores the bitmoji drawing
+var drawBitmojiSofia = function(bitmojiObject) {
+    drawSofiaBitmoji (bitmojiObject.x, bitmojiObject.y, bitmojiObject.h);
+    if (isSofiaSelected && currentScene === 1) {
+        stroke(255, 0, 0);
+        strokeWeight(3);
+        noFill();
+        rect(bitmojiObject.x - 14, bitmojiObject.y + -11, 80, 110, 10);
+
+    }
+};
+
+var bitmojiTaisIntro = new BitmojiObject(18, 39, 40); //Draws the Tais bitmoji in the opening sequence
+var bitmojiSofiaIntro = new BitmojiObject(528,270,52);//Draws the Sofia bitmoji in the opening sequence
+var bitmojiTaisSelect = new BitmojiObject(195, 40, 40); //Draws the Tais bitmoji in the selection sequence
+var bitmojiSofiaSelect = new BitmojiObject(356,65,62);//Draws the Sofia bitmoji in the selection sequence
+
+var Ball = function(position, speed) {
+    this.position = position;
+    this.speed = speed || BALL_SPEED;
+    
+    this.radius = 12;
+    
+    this.setSpeed = function(newSpeed) {
+        this.speed = newSpeed;
+        this.resetVelocity();
+    };
+    
+    this.resetVelocity = function() {
+        this.theta = random(0, 360);
+        this.velocity = new PVector(
+        this.speed*cos(this.theta), -this.speed*sin(this.theta));
+        player2Y = height/2;
+    };
+    this.resetVelocity();
+    
+this.draw = function() {
+    // Draw main ball
+    fill(206, 255, 28);
+    stroke(168, 168, 168);
+    ellipse(this.position.x, this.position.y, this.radius * 2, this.radius * 2);
+    noFill();
+    stroke(255, 255, 255);
+    beginShape();
+    for (var i = -65; i <= 63; i += 1) {
+        var x = this.position.x + this.radius / 2 * cos(i);
+        var y = this.position.y + this.radius * 1 * sin(i);
+        curveVertex(x, y);
+    }
+    endShape();
+};
+
+this.collideWithPaddle = function(x, y, paddleHeight, paddleWidth) {
+    var paddleLeftBoundary = x - paddleWidth/2;
+    var paddleRightBoundary = x + paddleWidth/2;
+    var paddleUpperBoundary = y - paddleHeight/2;
+    var paddleLowerBoundary = y + paddleHeight/2;
+
+    if (this.position.x - this.radius < paddleRightBoundary &&
+        this.position.x + this.radius > paddleLeftBoundary &&
+        this.position.y > paddleUpperBoundary &&
+        this.position.y < paddleLowerBoundary) {
+        if (this.position.x > x) {
+            this.position.x = x + this.radius + paddleWidth/2;
+        } else if (this.position.x < x) {
+            this.position.x = x - this.radius - paddleWidth/2;
+        }
+        this.velocity.mult(new PVector(-1, 1));
+    }
+};
+    
+    this.update = function() {
+        //Handle wall collisions
+        if (this.position.x < 0) {
+            player2Score++;
+            this.position = new PVector(width/2, height/2);
+            gameStarted = false;
+            this.resetVelocity();
+        }
+        else if (this.position.x > width) {
+            player1Score++;
+            this.position = new PVector(width/2, height/2);
+            gameStarted = false;
+            this.resetVelocity();
+        }
+        if (this.position.y < 35) {
+            this.position.y = 35;
+            this.velocity.mult(new PVector(1, -1));
+        }
+        else if (this.position.y > height) {
+            this.position.y = height;
+            this.velocity.mult(new PVector(1, -1));
+        }
+
+        //Handle paddle collisions //Change numbers to bigger or smaller to find out where the ball hits the paddle
+        this.collideWithPaddle(20, player1Y);
+        this.collideWithPaddle(width-20, player2Y);
+        
+        this.position.add(this.velocity);
+
+    };
+};
+ball = new Ball(new PVector(width/2, height/2), BALL_SPEED);
+
+function changeBallSpeed(newSpeed) {
+    BALL_SPEED = newSpeed;
+    ball.setSpeed(BALL_SPEED);
+}
+
+var drawScores = function() {
+    var s;
+    fill(13, 0, 255);
+    rect(-1,-1,width,31);
+    fill(0, 0, 0);
+    textSize(20);
+    s = "Tais: " + player1Score;
+    text(s, width*0.30-textWidth(s)/2, 45);
+    s = "Sofia: " + player2Score;
+    text(s, width*0.86-textWidth(s)/2, 45);
+};
+
+var updatePlayer2 = function() {
+    if (isTaisSelected) {
+        var adjustedPlayer2Y = player2Y + 50;
+
+        if (abs(adjustedPlayer2Y - ball.position.y) < PLAYER_MOVE_SPEED) {
+            adjustedPlayer2Y = ball.position.y;
+        } else if (adjustedPlayer2Y - ball.position.y >= PLAYER_MOVE_SPEED) {
+            adjustedPlayer2Y -= 2 * PLAYER_MOVE_SPEED;
+        } else if (adjustedPlayer2Y - ball.position.y <= PLAYER_MOVE_SPEED) {
+            adjustedPlayer2Y += 2 * PLAYER_MOVE_SPEED;
+        }
+
+        // Update player1Y by subtracting the adjustment
+        player2Y = adjustedPlayer2Y - 50;
+
+        // Constrain player1Y within the allowed range
+        player2Y = constrain(player2Y, 0, height - PADDLE_HEIGHT);
+    }
+};
+
+var updatePlayer1 = function() {
+    if (isSofiaSelected) {
+        var adjustedPlayer1Y = player1Y + 50;
+
+        if (abs(adjustedPlayer1Y - ball.position.y) < PLAYER_MOVE_SPEED) {
+            adjustedPlayer1Y = ball.position.y;
+        } else if (adjustedPlayer1Y - ball.position.y >= PLAYER_MOVE_SPEED) {
+            adjustedPlayer1Y -= 2 * PLAYER_MOVE_SPEED;
+        } else if (adjustedPlayer1Y - ball.position.y <= PLAYER_MOVE_SPEED) {
+            adjustedPlayer1Y += 2 * PLAYER_MOVE_SPEED;
+        }
+
+        // Update player1Y by subtracting the adjustment
+        player1Y = adjustedPlayer1Y - 50;
+
+        // Constrain player1Y within the allowed range
+                player1Y = constrain(player1Y, 0, height - PADDLE_HEIGHT);
+    }
+};
+
+//Move the player1 up
+var movePlayer1Up = function() {
+    player1Y -= 2.5 * PLAYER_MOVE_SPEED;
+};
+
+//Move the player1 down
+var movePlayer1Down = function() {
+    player1Y += 2.5 * PLAYER_MOVE_SPEED;
+};
+
+//Move the player2 up
+var movePlayer2Up = function() {
+    player2Y -= 2.5 * PLAYER_MOVE_SPEED;
+};
+
+//Move the player2 down
+var movePlayer2Down = function() {
+    player2Y += 2.5 * PLAYER_MOVE_SPEED;
+};
+
+var drawPlayers = function() {
+    //Constrain the player movement
+    player1Y = constrain (player1Y, 0, 360);
+    player2Y = constrain (player2Y, 0, 370);
+    
+    var drawBitmojiTais = function(bitmojiObject) {
+    drawTaisBitmoji (bitmojiObject.x, bitmojiObject.y, bitmojiObject.h );
+    };
+    var drawBitmojiSofia = function(bitmojiObject) {
+    drawSofiaBitmoji (bitmojiObject.x, bitmojiObject.y, bitmojiObject.h );
+    };
+    
+    var bitmojiTais = new BitmojiObject(-11, player1Y, PADDLE_HEIGHT/2.5);
+    var bitmojiSofia = new BitmojiObject(width-63, player2Y, PADDLE_HEIGHT/1.7);
+    ball.collideWithPaddle(11, player1Y+50, PADDLE_HEIGHT/2.5, PADDLE_WIDTH);
+    ball.collideWithPaddle(width-20, player2Y+30, PADDLE_HEIGHT/1.7, PADDLE_WIDTH);
+    drawBitmojiTais(bitmojiTais);
+    drawBitmojiSofia(bitmojiSofia);
+};
+
+var Button = function(config) {
+    this.x = config.x || 0;
+    this.y = config.y || 0;
+    this.width = config.width || 81;
+    this.height = config.height || 30;
+    this.label = config.label || "Click";
+    this.onClick = config.onClick || function() {};
+}; //General button code
+
+Button.prototype.draw = function() {
+    strokeWeight(2);
+    fill(255, 252, 176);
+    rect(this.x, this.y, this.width, this.height, 5);
+    fill(0, 0, 0);
+    textSize(19);
+    textAlign(CENTER, CENTER);  // Center the text
+    var textX = this.x + this.width / 2;
+    var textY = this.y + this.height / 2;
+    text(this.label, textX, textY);
+}; //Draws each button
+
+Button.prototype.isMouseInside = function() {
+    return mouseX > this.x &&
+           mouseX < (this.x + this.width) &&
+           mouseY > this.y &&
+           mouseY < (this.y + this.height);
+};//Checks if the mouse is clicked inside the button
+
+Button.prototype.handleMouseClick = function() {
+    if (this.isMouseInside()) {
+        this.onClick();
+    }
+}; //function to execute desired outcome of button click
+
+var bitmojiButton = function(config) {
+    this.x = config.x || 0;
+    this.y = config.y || 0;
+    this.width = config.width || 81;
+    this.height = config.height || 81;
+    this.label = config.label || "Click";
+    this.onClick = config.onClick || function() {};
+}; //Second button object for bitmojis
+
+bitmojiButton.prototype.draw = function() {
+    noFill();
+    noStroke();
+    rect(this.x, this.y, this.width, this.height, 5);
+};//Draws an clear rectangle
+
+
+bitmojiButton.prototype.isMouseInside = function() {
+    return mouseX > this.x &&
+           mouseX < (this.x + this.width) &&
+           mouseY > this.y &&
+           mouseY < (this.y + this.height);
+}; //Checks if the mouse is clicked inside the button
+
+bitmojiButton.prototype.handleMouseClick = function() {
+    if (this.isMouseInside()) {
+        this.onClick();
+    }
+};//function to execute desired outcome of button click
+
+var startButton = new Button ({
+    x: 237,
+    y: 323,
+    width: 131,
+    height:66,
+    label: "Start",
+    onClick: function() {
+       currentScene = 1;
+    }
+    });//Button to begin the game
+
+var easyButton = new Button({
+    x: width-355,
+    y: 230,
+    width: 116,
+    height:60,
+    label: 'Easy',
+    onClick: function() {
+        currentDifficulty = 'easy';
+        if (isTaisSelected || isSofiaSelected === true) {
+            currentScene = 2;
+        }
+    }
+}); // Selects the 'easy' level
+
+var hardButton = new Button({
+    x: 244,
+    y: 313,
+    width: 116,
+    height:60,
+    label: 'Hard',
+    onClick: function() {
+        currentDifficulty = 'hard';
+        ball.setSpeed(5);
+        if (isTaisSelected || isSofiaSelected === true) {
+            currentScene = 2;
+        }
+    }
+}); // Selects the 'hard' level
+
+var reStartButton = new Button({
+    x: 238,
+    y: 115,
+    width: 131,
+    height: 66,
+    label: 'Restart Game',
+    onClick: function () {
+        currentScene = 2;
+
+        // Set the ball speed based on the selected difficulty
+        if (currentDifficulty === "easy") {
+            changeBallSpeed(2.5);
+        } else if (currentDifficulty === "hard") {
+            changeBallSpeed(5);
+        }
+
+        ball = new Ball(new PVector(width / 2, height / 2), BALL_SPEED);
+    }
+});
+
+var quitButton = new Button ({
+    x: 412,
+    y: 0,
+    width: 92,
+    label: "Quit",
+    onClick: function() {
+        currentScene = 3;
+        isTaisSelected = false;
+        isSofiaSelected = false;
+        player1Score = 0;
+        player2Score = 0;
+    }
+    }); //To be used inside game to start over
+    
+var newGameButton = new Button ({
+    x: 237,
+    y: 323,
+    width: 131,
+    height:66,
+    label: "New Game",
+    onClick: function() {
+       currentScene = 0;
+       isTaisSelected = false;
+       isSofiaSelected = false;
+       player1Score = 0;
+       player2Score = 0;
+    }
+    });//Button to begin the game
+    
+var pauseButton = new Button({
+    x: 103,
+    y: 0,
+    label: 'Pause',
+    onClick: function() {
+        currentScene = 4;
+        //ball.setSpeed(0);    
+    }
+}); // Pauses game
+
+
+var TaisButton = new bitmojiButton({
+    x: 200,
+    y: 80,
+    width: 50,
+    height: 70,
+    onClick: function() {
+        isTaisSelected = !isTaisSelected;
+        isSofiaSelected = false;
+        currentScene = 1;
+    }
+}); // Tais button for selected screen
+
+var SofiaButton = new bitmojiButton({
+    x: 350,
+    y: 80,
+    width: 50,
+    height: 70,
+    onClick: function() {
+        isSofiaSelected = !isSofiaSelected;
+        isTaisSelected = false; 
+        currentScene = 1;    
+    }
+}); //Sofia button for selection screen
+
+
+
+
+var splashScreen = function(){
+    currentScene = 0;
+    noFill();
+    background(113, 222, 115);
+    stroke(255, 255, 255);
+    strokeWeight(5);
+    rect(13, 13, 272, 367); // Left perimeter
+    rect(13,13,272,40); // Left-top out
+    rect(13,338,272,41); // Left-bottom out
+    rect(126,53,159,145); // Left-top box
+    rect(126,199,159,139); // Left-bottom box
+    rect(319, 13, 272, 367); // Right perimeter
+    rect(320,13,272,40); // Right-top out
+    rect(319,338,272,41); // Right-bottom out
+    rect(320,53,159,147); // Right-top box
+    rect(320,199,159,138); // Right-bottom box
+    fill(89, 86, 89);
+    stroke(148, 148, 148);
+    strokeWeight(1);
+    rect(297,0,10,height); //Net
+    fill(79, 79, 79);
+    ellipse(547,105,53,53);
+    stroke(255, 255, 255);
+    fill(200, 255, 0);
+    ellipse(547,105,50,50); // Tennis ball
+    noFill();
+    beginShape();
+    vertex(538, 84);
+    strokeWeight(3);
+    bezierVertex(511, 113, 549, 139, 569, 115);
+    endShape();
+    drawBitmojiTais(bitmojiTaisIntro);
+    drawBitmojiSofia(bitmojiSofiaIntro);
+    textAlign(CENTER, CENTER);
+    textSize(37);
+    fill(0, 0, 0);
+    text('Bitmoji Tennis', 302, 92);
+    fill(247, 0, 247);
+    text('Bitmoji Tennis', 304, 94);
+    textSize(22);
+    fill(0, 0, 0);
+    text('By T. Yakimovich & S. Mancini', 304, 216);
+    fill(247, 0, 247);
+    text('By T. Yakimovich & S. Mancini', 306, 218);
+    textSize(20);
+    fill(0, 0, 0);
+    text('First to 6 wins!', 300, 272);
+    fill(247, 0, 247);
+    text('First to 6 wins!', 302, 273);
+    startButton.draw();
+
+}; //Opening scene
+
+var selectScreen = function(){
+    currentScene = 1;
+    background(253, 255, 181);
+    drawBitmojiTais(bitmojiTaisSelect);
+    drawBitmojiSofia(bitmojiSofiaSelect);
+    textAlign(CENTER, CENTER);
+    textSize(30);
+    text('Choose your player', 315,29);
+    TaisButton.draw();
+    SofiaButton.draw();
+    text('Select Difficulty', 305,192);
+    stroke(0, 0, 0);
+    easyButton.draw();
+    hardButton.draw();
+
+}; //Game options screen
+
+var gameScreen = function(){
+    currentScene = 2;
+    if (isTaisSelected) {
+        updatePlayer2();
+         if (keyIsPressed)
+         {
+             if (keyCode === UP)
+             {
+                 movePlayer1Up();
+             }
+             else if (keyCode === DOWN)
+             {
+                 movePlayer1Down();
+             }
+    }
+ }
+     if (isSofiaSelected) {
+        updatePlayer1();
+         if (keyIsPressed)
+         {
+             if (keyCode === UP)
+             {
+                 movePlayer2Up();
+             }
+             else if (keyCode === DOWN)
+             {
+                 movePlayer2Down();
+             }
+    }
+ }
+    //Draw the environment
+    noFill();
+    background(113, 222, 115);
+    stroke(255, 255, 255);
+    strokeWeight(5);
+    rect(13, 13, 272, 367); // Left perimeter
+    rect(13,13,272,40); // Left-top out
+    rect(13,338,272,41); // Left-bottom out
+    rect(126,53,159,145); // Left-top box
+    rect(126,199,159,139); // Left-bottom box
+    rect(319, 13, 272, 367); // Right perimeter
+    rect(320,13,272,40); // Right-top out
+    rect(319,338,272,41); // Right-bottom out
+    rect(320,53,159,147); // Right-top box
+    rect(320,199,159,138); // Right-bottom box
+    fill(89, 86, 89);
+    stroke(148, 148, 148);
+    fill(89, 86, 89);
+    noStroke();
+    rect(298,0,10,height); //Net
+    drawPlayers();
+    drawScores();
+    //Draw the ball
+        //drawBallShadow(ball.position.x, ball.position.y + ball.radius + 10, ball.radius);
+    ball.draw();
+    
+    if (!gameStarted) {
+        t++;
+        if (t >= PAUSE_TIME) {
+            t = 0;
+            gameStarted = true;
+        }
+        return;
+    }
+    if (player1Score === 6 && player2Score < 6)
+    {   currentScene = 3;
+        }
+    else if (player2Score === 6 && player1Score < 6)
+    {   currentScene = 3;
+        }
+    if (player1Score > player2Score)
+        {winner = 'Tais';  
+        winnerScore = player1Score;
+    }
+    else if (player2Score > player1Score)
+    {winner = 'Sofia';  
+    winnerScore = player2Score;
+    }
+    else if (player2Score === player1Score)
+    {winner = 'Tie';
+    winnerScore = player2Score;
+    }
+    ball.update();
+
+}; //Actual gameplay
+
+var pauseScreen = function(){
+    currentScene = 4;
+    background(250, 205, 252);
+    drawBitmojiTais(bitmojiTaisIntro);
+    drawBitmojiSofia(bitmojiSofiaIntro);
+    textAlign(CENTER, CENTER);
+    textSize(30);
+    text('To return to the game click here:', 315,70);
+    text('To start over click here:', 305,287);
+    stroke(0, 0, 0);
+    reStartButton.draw();
+
+}; //Game options screen
+
+
+var stars = 1;
+var xPositions = [];
+var yPositions = [];
+var starSpeed =[];
+ 
+var drawStars = function() // Stars for EndScreen decoration
+{   
+    for(var i = 1; i<= stars; ++i) // fill in arrays
+        {
+            xPositions.push(round(random(0,600)));
+            yPositions. push(round(random(-50,0)));
+            starSpeed.push(round(random(-4.5, 3.4)));
+        }
+    
+
+    for (var i = 0; i < xPositions.length; i++) 
+        {
+            image(getImage("cute/Star"), xPositions[i], yPositions[i], 20, 25);
+            yPositions[i] += starSpeed[i]; //stars speed and behaviour 
+            if(yPositions[i] > 400) 
+                {
+                    yPositions[i] = round(random(-100, 0));
+                }
+        }
+};
+
+var endScreen = function(){
+    currentScene = 3;
+    background(144, 225, 232);
+    drawBitmojiTais(bitmojiTaisIntro);
+    drawBitmojiSofia(bitmojiSofiaIntro);
+    textAlign(CENTER, CENTER);
+    textSize(50);
+    if (winner === 'Tie') {
+        text('The game is a tie', 309, 110);    
+    }
+    else {
+        text(winner +  ' wins!!', 309, 110); // Name of the winner 
+    }
+    textSize(30);
+    text('Your final score is: ' + winnerScore, 273, 239); //Final Score here
+    newGameButton.draw();
+    drawStars();
+
+}; //Final game screen
+
+mouseClicked = function() {
+    if (currentScene === 0) {
+        startButton.handleMouseClick();
+    }
+    else if (currentScene === 1) {
+        TaisButton.handleMouseClick(); 
+        SofiaButton.handleMouseClick(); 
+        easyButton.handleMouseClick();
+        hardButton.handleMouseClick();
+        reStartButton.handleMouseClick();
+    }
+    else if (currentScene === 2) {
+        pauseButton.handleMouseClick(); 
+        quitButton.handleMouseClick();
+    }
+    else if (currentScene === 3) {
+        newGameButton.handleMouseClick();  
+    }
+    else if (currentScene === 4) {
+        reStartButton.handleMouseClick();  
+        newGameButton.handleMouseClick();
+    }
+}; //Directs the game by mouse clicks
+
+//splashScreen(); //Draws the opening scene
+//selectScreen();
+//gameScreen();
+//endScreen();
+//pauseScreen();
+
+    
+draw = function() {
+    if (currentScene === 0) {
+        splashScreen();
+        //startButton.draw();
+    } else if (currentScene === 1) {
+        selectScreen();
+        easyButton.draw();
+        hardButton.draw();
+        TaisButton.draw();
+        SofiaButton.draw();
+    } else if (currentScene === 2) {
+        gameScreen();
+        pauseButton.draw();
+        quitButton.draw();
+    } else if (currentScene === 3) {
+        endScreen();
+        isTaisSelected = false;
+        isSofiaSelected = false;
+        newGameButton.draw();
+    } else if (currentScene === 4) {
+        pauseScreen();
+        reStartButton.draw();
+        newGameButton.draw();
+    }
+}; //Handles the animation
